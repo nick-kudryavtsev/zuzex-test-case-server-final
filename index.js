@@ -18,6 +18,7 @@ const PORT = 3001
 
 //  mocks
 const users = []
+const messages = []
 
 io.on('connection', (socket) => {
     console.log('a user connected');
@@ -26,6 +27,12 @@ io.on('connection', (socket) => {
         users.push(user)
         console.log(users)
         io.emit('USER:JOINED', users)
+    })
+
+    socket.on('USER:MESSAGE', message => {
+        messages.push(message)
+        console.log(messages)
+        io.emit('USER:MESSAGE', messages)
     })
 
     socket.on('disconnect', socket => {
