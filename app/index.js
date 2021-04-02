@@ -13,6 +13,10 @@ const PORT = process.env.PORT || 80
 let users = []
 const messages = []
 
+app.get('/', (req, res) => {
+    res.send('<h1>Может быть даже работает, lel.</h1>')
+})
+
 io.on('connection', (socket) => {
     console.log('a user connected');
     //  попробуем замкнуть
