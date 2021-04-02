@@ -7,14 +7,7 @@ const io = require('socket.io')(http, {
 });
 
 //  constants
-const PORT = 3001
-
-/*
-* How user is:
-* const user = {
-*   name: String
-* }
-* */
+const PORT = process.env.PORT || 80
 
 //  mocks
 let users = []
