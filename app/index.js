@@ -34,6 +34,7 @@ io.on('connection', (socket) => {
     socket.on('USER:MESSAGE', message => {
         if(message){
             message.id = msgId
+            message.socketId = socket.id
             messages.push(message)
             msgId = msgId + 1
         }
@@ -43,7 +44,14 @@ io.on('connection', (socket) => {
 
     socket.on('USER:DELETE_MESSAGE', idx => {
         console.log(idx)
-        messages = messages.filter(msg => msg.msg !== idx)
+        // messages = messages.filter(msg => msg.msg !== idx && msg.socketId === correntId)
+        messages = messages.filter(msg => {
+            if(msg.socketId === correntId){
+                return msg.msg !== idx
+            } else if(msg.socketId !== correntId){
+                return msg.msg
+            }
+        })
         io.emit('USER:DELETE_MESSAGE', messages)
     })
 
