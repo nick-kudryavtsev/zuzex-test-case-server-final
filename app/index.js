@@ -7,16 +7,17 @@ const io = require('socket.io')(http, {
 });
 
 //  constants
-const PORT = process.env.PORT || 80
+const PORT = process.env.PORT || 3001
 
 //  mocks
 let users = []
-const messages = []
+let messages = []
 
 app.get('/', (req, res) => {
     res.send('<h1>Может быть даже работает, lel.</h1>')
 })
 
+let msgId = 0
 io.on('connection', (socket) => {
     console.log('a user connected');
     //  попробуем замкнуть
@@ -32,10 +33,18 @@ io.on('connection', (socket) => {
 
     socket.on('USER:MESSAGE', message => {
         if(message){
+            message.id = msgId
             messages.push(message)
+            msgId = msgId + 1
         }
         console.log(messages)
         io.emit('USER:MESSAGE', messages)
+    })
+
+    socket.on('USER:DELETE_MESSAGE', idx => {
+        console.log(idx)
+        messages = messages.filter(msg => msg.msg !== idx)
+        io.emit('USER:DELETE_MESSAGE', messages)
     })
 
     //  что будет если удалит socket?
